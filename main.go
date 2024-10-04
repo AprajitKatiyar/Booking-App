@@ -41,6 +41,12 @@ func main() {
 		fmt.Println("How many tickets would you like to book? ")
 		fmt.Scan(&userTickets)
 
+		//Check if the user is trying to book more tickets than available
+		if userTickets > remainingTickets {
+			fmt.Printf("Sorry, we only have %v tickets remaining. Please try again.\n", remainingTickets)
+			continue
+		}
+
 		remainingTickets = remainingTickets - userTickets
 		bookings = append(bookings, firstName+" "+lastName)
 
@@ -60,6 +66,12 @@ func main() {
 		}
 
 		fmt.Printf("The first names of the bookings are %v\n", firstNames)
+
+		noTickets := remainingTickets == 0
+		if noTickets {
+			fmt.Println("All tickets have been booked!")
+			break
+		}
 	}
 
 	//Print the data type of the variables
