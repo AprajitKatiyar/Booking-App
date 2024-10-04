@@ -10,10 +10,13 @@ func main() {
 	fmt.Println("We have total", conferenceTickets, "tickets available for the conference and ", remainingTickets, "are still available.")
 	fmt.Println("Get your tickets here to attend.")
 
-	var bookings [50]string
+	//Declaring a slice
+	var bookings []string
 
-	//Alternate way to declare an array
-	//var bookings = [50]string{}
+	//Alternate way to declare an slice
+	//var bookings = []string{}
+	//OR
+	//bookings:=[]string{}
 
 	var firstName string
 	var lastName string
@@ -34,12 +37,12 @@ func main() {
 	fmt.Scan(&userTickets)
 
 	remainingTickets = remainingTickets - userTickets
-	bookings[0] = firstName + " " + lastName
+	bookings = append(bookings, firstName+""+lastName)
 
-	fmt.Printf("The whole array is %v\n", bookings)
+	fmt.Printf("The whole slice is %v\n", bookings)
 	fmt.Printf("The first element is %v\n", bookings[0])
-	fmt.Printf("Type of the array is %T\n", bookings)
-	fmt.Printf("The length of the array is %v\n", len(bookings))
+	fmt.Printf("Type of the slice is %T\n", bookings)
+	fmt.Printf("The length of the slice is %v\n", len(bookings))
 
 	//To print the memory address of the variable
 	//fmt.Println(&remainingTickets)
