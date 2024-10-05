@@ -12,7 +12,14 @@ const conferenceTickets = 50
 
 var remainingTickets uint = conferenceTickets
 
-var bookings = []map[string]string{}
+var bookings = []UserData{}
+
+type UserData struct {
+	firstName string
+	lastName  string
+	email     string
+	tickets   uint
+}
 
 func main() {
 
@@ -53,7 +60,7 @@ func greetUsers() {
 func getFirstNames() []string {
 	firstNames := []string{}
 	for _, booking := range bookings {
-		var firstName = booking["firstName"]
+		var firstName = booking.firstName
 		firstNames = append(firstNames, firstName)
 	}
 	return firstNames
@@ -86,11 +93,12 @@ func bookTickets(firstName string, lastName string, email string, userTickets ui
 	//Declare a map for storing user data
 	//var userData map[string]string
 	//Alternate way to declare a empty map
-	userData := make(map[string]string)
-	userData["firstName"] = firstName
-	userData["lastName"] = lastName
-	userData["email"] = email
-	userData["tickets"] = fmt.Sprint(userTickets)
+	userData := UserData{
+		firstName: firstName,
+		lastName:  lastName,
+		email:     email,
+		tickets:   userTickets,
+	}
 	bookings = append(bookings, userData)
 
 	fmt.Printf("Hello %v %v, you have booked %v tickets for the conference.\n", firstName, lastName, userTickets)
