@@ -5,36 +5,23 @@ import (
 	"strings"
 )
 
+// Decalring global variables/package level variables
+var conferenceName = "Go Conference"
+
+const conferenceTickets = 50
+
+var remainingTickets uint = conferenceTickets
+
+var bookings []string
+
 func main() {
-	var conferenceName = "Go Conference"
-	const conferenceTickets = 50
-	var remainingTickets uint = conferenceTickets
-	fmt.Printf("Welcome to %v booking application!\n", conferenceName)
-	fmt.Println("We have total", conferenceTickets, "tickets available for the conference and ", remainingTickets, "are still available.")
-	fmt.Println("Get your tickets here to attend.")
 
-	var bookings []string
+	greetUsers()
+
 	for {
-		var firstName string
-		var lastName string
-		var email string
-		var userTickets uint
+		firstName, lastName, email, userTickets := getUserInput()
 
-		fmt.Println("Please enter your first name: ")
-		fmt.Scan(&firstName)
-
-		fmt.Println("Please enter your last name: ")
-		fmt.Scan(&lastName)
-
-		fmt.Println("Please enter your email: ")
-		fmt.Scan(&email)
-
-		fmt.Println("How many tickets would you like to book? ")
-		fmt.Scan(&userTickets)
-
-		isNameValid := len(firstName) > 2 && len(lastName) > 2
-		isEmailValid := strings.Contains(email, "@")
-
+		isNameValid, isEmailValid := isValidUserInput(firstName, lastName, email)
 		if !isNameValid || !isEmailValid {
 			fmt.Println("Your input data is invalid.Please try again.")
 			continue
@@ -46,22 +33,7 @@ func main() {
 			continue
 		}
 
-		remainingTickets = remainingTickets - userTickets
-		bookings = append(bookings, firstName+" "+lastName)
-
-		fmt.Printf("Hello %v %v, you have booked %v tickets for the conference.\n", firstName, lastName, userTickets)
-		fmt.Printf("You will receive a confirmation email at %v\n", email)
-
-		fmt.Printf("Remaining tickets: %v\n", remainingTickets)
-
-		firstNames := []string{}
-		for _, booking := range bookings {
-			var names = strings.Fields(booking)
-			var firstName = names[0]
-			firstNames = append(firstNames, firstName)
-		}
-
-		fmt.Printf("The first names of the bookings are %v\n", firstNames)
+		bookTickets(firstName, lastName, email, userTickets)
 
 		noTickets := remainingTickets == 0
 		if noTickets {
@@ -70,17 +42,60 @@ func main() {
 		}
 	}
 
-	//Print the data type of the variables
-	//fmt.Printf("Data type of conferenceName is %T\n", conferenceName)
-	//fmt.Printf("Data type of conferenceTickets is %T\n", conferenceTickets)
-	//fmt.Printf("Data type of remainingTickets is %T\n", remainingTickets)
+}
 
-	//Can also specify the types yourself
-	// var conferenceName string = "Go Conference"
-	// var conferenceTickets int = 50
-	//var ticketPrice float64 = 100.50
+func greetUsers() {
+	fmt.Printf("Welcome to %v booking application!\n", conferenceName)
+	fmt.Println("We have total", conferenceTickets, "tickets available for the conference and ", remainingTickets, "are still available.")
+	fmt.Println("Get your tickets here to attend.")
+}
+func getFirstNames() []string {
+	firstNames := []string{}
+	for _, booking := range bookings {
+		var names = strings.Fields(booking)
+		var firstName = names[0]
+		firstNames = append(firstNames, firstName)
+	}
+	return firstNames
 
-	//Another way to declare variables
-	//myName := "John Doe" //cannot do this for a constant though
+}
 
+func isValidUserInput(firstName string, lastName string, email string) (bool, bool) {
+	isNameValid := len(firstName) > 2 && len(lastName) > 2
+	isEmailValid := strings.Contains(email, "@")
+
+	return isNameValid, isEmailValid
+}
+
+func getUserInput() (string, string, string, uint) {
+	var firstName string
+	var lastName string
+	var email string
+	var userTickets uint
+	fmt.Println("Please enter your first name: ")
+	fmt.Scan(&firstName)
+
+	fmt.Println("Please enter your last name: ")
+	fmt.Scan(&lastName)
+
+	fmt.Println("Please enter your email: ")
+	fmt.Scan(&email)
+
+	fmt.Println("How many tickets would you like to book? ")
+	fmt.Scan(&userTickets)
+
+	return firstName, lastName, email, userTickets
+
+}
+func bookTickets(firstName string, lastName string, email string, userTickets uint) {
+	remainingTickets = remainingTickets - userTickets
+	bookings = append(bookings, firstName+" "+lastName)
+
+	fmt.Printf("Hello %v %v, you have booked %v tickets for the conference.\n", firstName, lastName, userTickets)
+	fmt.Printf("You will receive a confirmation email at %v\n", email)
+
+	fmt.Printf("Remaining tickets: %v\n", remainingTickets)
+
+	firstNames := getFirstNames()
+	fmt.Printf("The first names of the bookings are %v\n", firstNames)
 }
