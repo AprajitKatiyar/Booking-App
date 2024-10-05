@@ -13,22 +13,13 @@ func main() {
 	fmt.Println("We have total", conferenceTickets, "tickets available for the conference and ", remainingTickets, "are still available.")
 	fmt.Println("Get your tickets here to attend.")
 
-	//Declaring a slice
 	var bookings []string
-
-	//Alternate way to declare an slice
-	//var bookings = []string{}
-	//OR
-	//bookings:=[]string{}
-
-	//Infinite loop to keep taking user input
 	for {
 		var firstName string
 		var lastName string
 		var email string
 		var userTickets uint
 
-		//take user input
 		fmt.Println("Please enter your first name: ")
 		fmt.Scan(&firstName)
 
@@ -41,6 +32,14 @@ func main() {
 		fmt.Println("How many tickets would you like to book? ")
 		fmt.Scan(&userTickets)
 
+		isNameValid := len(firstName) > 2 && len(lastName) > 2
+		isEmailValid := strings.Contains(email, "@")
+
+		if !isNameValid || !isEmailValid {
+			fmt.Println("Your input data is invalid.Please try again.")
+			continue
+		}
+
 		//Check if the user is trying to book more tickets than available
 		if userTickets > remainingTickets {
 			fmt.Printf("Sorry, we only have %v tickets remaining. Please try again.\n", remainingTickets)
@@ -49,9 +48,6 @@ func main() {
 
 		remainingTickets = remainingTickets - userTickets
 		bookings = append(bookings, firstName+" "+lastName)
-
-		//To print the memory address of the variable
-		//fmt.Println(&remainingTickets)
 
 		fmt.Printf("Hello %v %v, you have booked %v tickets for the conference.\n", firstName, lastName, userTickets)
 		fmt.Printf("You will receive a confirmation email at %v\n", email)
