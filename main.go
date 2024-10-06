@@ -3,6 +3,8 @@ package main
 import (
 	"booking-app/helper"
 	"fmt"
+	"sync"
+	"time"
 )
 
 // Decalring global variables/package level variables
@@ -13,6 +15,8 @@ const conferenceTickets = 50
 var remainingTickets uint = conferenceTickets
 
 var bookings = []UserData{}
+
+var wg = sync.WaitGroup{}
 
 type UserData struct {
 	firstName string
@@ -41,6 +45,8 @@ func main() {
 		}
 
 		bookTickets(firstName, lastName, email, userTickets)
+		wg.Add(1)
+		go sendTickets(userTickets, firstName, lastName, email)
 		fmt.Printf("The bookings are %v\n", bookings)
 
 		noTickets := remainingTickets == 0
@@ -48,7 +54,15 @@ func main() {
 			fmt.Println("All tickets have been booked!")
 			break
 		}
+		fmt.Println("Do you want to book more tickets? (yes/no): ")
+		var choice string
+		fmt.Scan(&choice)
+		if choice == "no" {
+			break
+		}
+
 	}
+	wg.Wait()
 
 }
 
@@ -108,4 +122,13 @@ func bookTickets(firstName string, lastName string, email string, userTickets ui
 
 	firstNames := getFirstNames()
 	fmt.Printf("The first names of the bookings are %v\n", firstNames)
+}
+func sendTickets(tickets uint, firstName string, lastName string, email string) {
+	time.Sleep(10 * time.Second)
+	var ticket = fmt.Sprintf("%v tickets for %v %v", tickets, firstName, lastName)
+	fmt.Println("-------------------------------")
+	fmt.Printf("Sending ticket:\n%v\nTo email address: %v\n", ticket, email)
+	fmt.Println("-------------------------------")
+	wg.Done()
+
 }
